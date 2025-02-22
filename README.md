@@ -26,11 +26,10 @@ The dataset includes the following variables:
 
   🌡 Body_Temp: Body temperature during exercise (°C)
 
-  🔥 Calories: Calories burned (target variable)
+  🔥 Calories: Calories burned (target variable
+  
 
-  🛠 Models Used
-
-    Three different machine learning algorithms were used in this project:
+      🛠 Models Used
 
 🌲 Random Forest Regression
 
@@ -62,8 +61,9 @@ The dataset includes the following variables:
 
   📌 X, Y, Z: Diamond dimensions
 
-    🛠 Models Used
 
+    🛠 Models Used
+    
 
 📈 Polynomial Regression
 
