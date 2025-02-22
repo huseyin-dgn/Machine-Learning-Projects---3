@@ -1,0 +1,177 @@
+📌 Kodun Adım Adım Açıklaması
+
+Bu kodda elmas türlerini tahmin etmek için SVM (Support Vector Machine) ve MultiOutputClassifier kullandık. 🏆
+Veriyi işledik, sınıflandırma modelimizi eğittik ve performansını ölçtük. 🚀
+Şimdi adım adım inceleyelim! 👇
+
+📂 1. Veriyi Yükleme ve Keşifsel Analiz
+
+📌 Amaç: CSV dosyasını yükleyip veri hakkında bilgi almak.
+
+df = pd.read_csv("type of the Diamond new.csv")
+df.head()  # İlk 5 satırı gösterir
+df.info()  # Veri tipi ve eksik değer bilgisi
+df.isna().sum()  # Eksik değer sayısını kontrol eder
+df.shape  # Veri setinin kaç satır ve sütundan oluştuğunu gösterir
+🧐 Ne yapıyoruz?
+
+Veri setini yüklüyoruz ✅
+Eksik değer olup olmadığını kontrol ediyoruz ✅
+Veri tiplerini ve boyutunu inceliyoruz ✅
+
+📊 2. Veri Görselleştirme
+
+📌 Amaç: Veri içindeki ilişkileri görmek.
+
+sns.pairplot(df)  # Değişkenler arasındaki ilişkileri gösterir
+sns.heatmap(df.corr(numeric_only=True), annot=True)  # Korelasyon matrisi
+📌 Neden?
+✅ pairplot() → Değişkenler arasındaki doğrusal ilişkileri görselleştirir.
+✅ heatmap() → Değişkenler arasındaki korelasyonu gösterir (örneğin, fiyat ile kalite ilişkisi).
+
+📏 3. Veriyi Ölçeklendirme
+
+📌 Amaç: Verileri 0 ile 1 arasına ölçeklemek, böylece modelin daha iyi öğrenmesini sağlamak.
+
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+df[['x (Premium)', 'z (Very Good)', 'y (Good)']] = scaler.fit_transform(df[['x (Premium)', 'z (Very Good)', 'y (Good)']])
+🔹 MinMaxScaler ne yapar?
+👉 Tüm sayısal değerleri 0-1 aralığına getirir.
+👉 Modelin daha hızlı ve stabil öğrenmesini sağlar.
+
+📌 4. Bağımlı ve Bağımsız Değişkenleri Belirleme
+📌 Amaç: Modelin hangi sütunları kullanacağını belirlemek.
+
+x = pd.get_dummies(df.drop(columns=['x (Premium)', 'z (Very Good)', 'y (Good)']))
+y = df[['x (Premium)', 'z (Very Good)', 'y (Good)']]
+
+🧐 Burada ne yaptık?
+
+✅ Bağımsız değişkenleri (x) belirledik
+✅ Hedef değişkenleri (y) seçtik
+
+📌 get_dummies() ne işe yarar?
+👉 Kategorik değişkenleri sayısal forma çevirir (One-Hot Encoding).
+
+📂 5. Veriyi Train-Test Olarak Ayırma ve Standartlaştırma
+
+📌 Amaç: Modeli eğitmek için bir kısmını ayırmak, kalanıyla test etmek.
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.1, random_state=9)
+
+scaler = StandardScaler()
+scaler_X_train = scaler.fit_transform(X_train)
+scaler_X_test = scaler.transform(X_test)
+
+🎯 Neden Train-Test Split yapıyoruz?
+
+👉 Modelin yeni verilerle nasıl çalıştığını test etmek için.
+
+📌 StandardScaler() ne yapar?
+👉 Verileri ortalama 0, standart sapma 1 olacak şekilde ölçekler (özellikle SVM için çok önemli!).
+
+🤖 6. SVM Modeli ile Sınıflandırma
+
+📌 Amaç: Elmasların türünü tahmin etmek için SVM modelini eğitmek.
+
+from sklearn.svm import SVC
+svc = SVC()
+💡 SVC (Support Vector Classifier) nedir?
+👉 Verileri ayrıştırarak doğru sınıfa atamaya çalışır.
+
+🔀 7. MultiOutputClassifier Kullanımı
+
+📌 Amaç: Tek modelle tüm hedef değişkenleri aynı anda tahmin etmek.
+
+from sklearn.multioutput import MultiOutputClassifier
+svc = SVC()
+multi_output_model = MultiOutputClassifier(svc, n_jobs=-1)
+multi_output_model.fit(scaler_X_train, y_train)
+pred = multi_output_model.predict(scaler_X_test)
+
+🛠 Burada ne yaptık?
+
+✅ MultiOutputClassifier kullanarak tüm hedefleri aynı anda tahmin ettik.
+✅ n_jobs=-1 ile tüm işlemci çekirdeklerini kullandık.
+
+📊 8. Model Performansını Değerlendirme
+
+📌 Amaç: Modelin doğru tahmin yapıp yapmadığını kontrol etmek.
+
+from sklearn.metrics import classification_report 
+
+labels = ['x (Premium)', 'z (Very Good)', 'y (Good)']
+for i, label in enumerate(labels):
+    print(f"{label} için sınıflandırma raporu:")
+    print(classification_report(y_test[label], pred[:, i]))
+🧐 Burada ne yaptık?
+✅ Her hedef değişken için precision, recall, F1-score değerlerini hesapladık.
+
+📊 9. Confusion Matrix Görselleştirme
+
+📌 Amaç: Modelin doğru ve yanlış tahminlerini görselleştirmek.
+
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+for i, label in enumerate(labels):
+    cm = confusion_matrix(y_test[label], pred[:, i])
+    sns.heatmap(cm, annot=True, fmt='d', cmap="Blues", ax=axes[i])
+    axes[i].set_title(f"Confusion Matrix - {label}")
+    axes[i].set_xlabel("Predicted Label")
+    axes[i].set_ylabel("True Label")
+
+plt.tight_layout()
+plt.show()
+📌 Neden kullanıyoruz?
+👉 Modelin hangi sınıfları doğru/yanlış tahmin ettiğini görmek için.
+
+
+📈 10. ROC-AUC Eğrisi Çizme
+📌 Amaç: Modelin sınıflandırma başarısını görselleştirmek.
+
+from sklearn.metrics import roc_curve, auc
+
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+for i, label in enumerate(labels):
+    fpr, tpr, _ = roc_curve(y_test[label], pred[:, i])
+    roc_auc = auc(fpr, tpr)
+    axes[i].plot(fpr, tpr, color='darkorange', lw=2, label=f"AUC = {roc_auc:.2f}")
+    axes[i].plot([0, 1], [0, 1], color='navy', linestyle='--')
+    axes[i].set_title(f"ROC Curve - {label}")
+    axes[i].set_xlabel("False Positive Rate")
+    axes[i].set_ylabel("True Positive Rate")
+    axes[i].legend(loc="lower right")
+
+plt.tight_layout()
+plt.show()
+
+📌 Neden önemli?
+
+👉 AUC değeri ne kadar yüksekse model o kadar iyi tahmin yapıyor.
+
+🎯 SONUÇ
+✅ Veriyi yükledik ve temizledik.
+✅ Ölçeklendirme ve Train-Test ayırma yaptık.
+✅ SVM ile model eğittik ve tahmin yaptık.
+✅ Sonuçları görselleştirerek analiz ettik.
+
+🔥 Elmas türlerini tahmin eden başarılı bir model oluşturduk! 🚀
+
+
+
+
+
+
+
+
+
+
+
+

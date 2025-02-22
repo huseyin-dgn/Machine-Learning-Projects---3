@@ -1,0 +1,49 @@
+📊 Diamond Price Prediction Using Polynomial Regression 💎
+
+1. Veri Yükleme ve Keşifsel Veri Analizi (EDA) 🔍:
+
+type of the Diamond new.csv dosyası pandas ile yüklenir ve veri setinin ilk 5 satırı incelenir (df.head()).
+Veri seti hakkında genel bilgi alınır (df.info()).
+
+Eksik değerler kontrol edilir (df.isna().sum()).
+
+Veri setinin boyutu (df.shape) ve görselleştirme işlemleri yapılır: sns.pairplot(df) ve sns.heatmap(df.corr(numeric_only=True), annot=True).
+
+2. Polinomal Regresyon Modeli (🔢):
+
+Bağımsız değişkenler (x) ve hedef değişken (y) belirlenir. pd.get_dummies fonksiyonu ile kategorik veriler sayısal verilere dönüştürülür.
+
+Veriler polinomal hale getirilir (PolynomialFeatures(degree=3) ile) ve eğitim/test verilerine bölünür.
+
+3. Model Eğitimi ve Tahminler (📈):
+
+LinearRegression kullanılarak model eğitilir ve test verisi üzerinde tahminler yapılır.
+Modelin başarısı, Mean Absolute Error (MAE) ve R² skoru ile değerlendirilir.
+
+4. En İyi Polinom Derecesinin Seçilmesi (🎯):
+
+Farklı polinom dereceleri (1, 2, 3) için model eğitilir ve eğitim/test RMSE değerleri karşılaştırılır.
+En iyi modelin hangi dereceden elde edildiği belirlenir ve görselleştirilir.
+
+5. En İyi Polinom Derecesi ile Model Eğitimi:
+
+PolynomialFeatures(degree=2) ile en iyi derece seçilir ve model tekrar eğitilir.
+Modelin doğruluğu, Mean Absolute Error (MAE) ve R² skoru ile bir kez daha değerlendirilir.
+
+6. Gerçek ve Tahmin Edilen Fiyatların Karşılaştırılması (📊):
+
+Gerçek Fiyatlar ve Tahmin Edilen Fiyatlar görsel olarak karşılaştırılır.
+
+Mavi renk ile gerçek fiyatlar, Kırmızı renk ile tahmin edilen fiyatlar gösterilir.
+
+📊 Sonuçlar: Polinomal Regresyon Modeli (degree=2) 💎
+
+Mean Absolute Error (MAE): 397.59272
+R² Score: 0.96899
+
+🏆 Değerlendirme:
+
+R² skoru çok yüksek, bu da modelin çoğu varyansı doğru tahmin ettiğini gösteriyor. %96.9 oranında doğru tahmin yapıldığını söyleyebiliriz.
+MAE (Mean Absolute Error) değeri, tahmin edilen fiyatlar ile gerçek fiyatlar arasındaki ortalama farkı gösteriyor. Bu hata, modelin oldukça doğru olduğunu ve fiyat tahminlerinin çoğunlukla gerçek değerlerin yakınında olduğunu gösteriyor.
+
+

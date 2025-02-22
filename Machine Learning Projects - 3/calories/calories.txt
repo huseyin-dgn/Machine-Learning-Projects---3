@@ -1,0 +1,74 @@
+📊 Veri Analizi ve Model Karşılaştırması 🧑‍💻
+
+1. Veri Yükleme ve Keşifsel Veri Analizi (EDA) 🔍:
+
+calories.csv dosyası pandas ile yüklenir ve veri setinin ilk 5 satırı incelenir (df.head()).
+
+Veri setindeki eksik değerler kontrol edilir (df.isna().sum()).
+
+sns.pairplot(df) ve sns.heatmap(df.corr(numeric_only=True), annot=True) ile veriler arasındaki ilişki görselleştirilir.
+
+df.describe() fonksiyonu ile veri setinin temel istatistiksel özetine ulaşılır.
+
+2. Random Forest Regresyon Modeli 🌲:
+
+Calories sütunu çıkarılarak bağımsız değişkenler (özellikler) ve hedef değişken (kalori) tanımlanır.
+
+Özellikler, kategorik veriler varsa pd.get_dummies() fonksiyonu ile sayısal verilere dönüştürülür.
+
+train_test_split ile veriler eğitim ve test setlerine ayrılır (test oranı %10).
+
+GridSearchCV kullanılarak Random Forest modelinin en iyi hiperparametreleri (bootstrap ve oob_score) bulunur ve en iyi model seçilir.
+
+Modelin doğruluğu, mean_absolute_error, mean_squared_error ve r2_score gibi metriklerle değerlendirilir.
+
+3. Polinomal Regresyon Modeli 🔢:
+
+Polinom özellikler oluşturulur (PolynomialFeatures(degree=4) ile) ve eğitim/test setlerine bölünür.
+
+Lineer Regresyon modeli ile eğitim yapılır ve tahminler oluşturulur.
+
+Modelin başarısı RMSE ve R² skorları ile değerlendirilir.
+
+4. Lineer Regresyon Modeli ➡️:
+
+Calories tahmin etmek için basit Lineer Regresyon modeli kullanılır.
+
+Model eğitilir ve test edilir, ardından performansı RMSE ve R² skorları ile ölçülür.
+
+5. Model Performans Karşılaştırması 📊:
+
+Farklı modellerin R² skoru ve RMSE (Root Mean Squared Error) değerleri karşılaştırılır. Bunun için görseller oluşturulmuş ve bu metriklere göre modeller arasındaki farklar görsel olarak analiz edilmiştir.
+
+Grafiklerde "Random Forest", "Linear Regression" ve "Polynomial Regression" modelleri karşılaştırılmıştır.
+
+
+📊 Model Performans Karşılaştırması 🧑‍💻
+
+1. Random Forest Modeli (🌲):
+Mae: 1.76
+Rmse: 2.74
+R²: 0.9981
+
+2. Polinomal Regresyon Modeli (🔢):
+Mae: 7.72
+Rmse: 10.26
+R²: 0.9732
+
+3. Lineer Regresyon Modeli (➗):
+
+Mae: 8.24
+Rmse: 11.39
+R²: 0.9670
+
+🏆 Sonuç:
+Random Forest modelinin, diğer iki modele göre çok daha iyi performans gösterdiği açıkça görülmektedir.
+R² skoru çok yüksek (0.9981) ve hata (RMSE) çok düşük (2.74).
+Polinomal Regresyon ve Lineer Regresyon modelleri daha yüksek hata (RMSE) ve daha düşük R² skorları ile performans sergilemiştir.
+Bu, Random Forest modelinin daha doğru tahminler yaparak kalori tahmini konusunda en iyi seçenek olduğunu gösteriyor. 🌟
+
+
+
+
+
+
